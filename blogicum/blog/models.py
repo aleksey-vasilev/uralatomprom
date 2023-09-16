@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 from core.models import PublishedModel
 from .constants import MAX_LENGTH, STR_LENGTH
@@ -65,12 +66,35 @@ class Post(PublishedModel):
         null=True,
         verbose_name='Категория',
     )
+    image = models.ImageField('Изображение',
+                              upload_to='birthdays_images',
+                              blank=True)
 
     class Meta:
         verbose_name = 'публикация'
         verbose_name_plural = 'Публикации'
         default_related_name = 'posts'
-        ordering = ('pub_date', 'title')
+        ordering = ('-pub_date', 'title')
 
     def __str__(self):
         return self.title[:STR_LENGTH]
+
+    def get_absolute_url(self):
+        return reverse('blog:post_detail', kwargs={'pk': self.pk})
+
+    def comment_count(post):
+        return post.comments.count()
+
+
+class Comment(models.Model):
+    text = models.TextField('Комментарий')
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='comments',
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ('created_at',)

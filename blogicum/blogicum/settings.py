@@ -12,9 +12,10 @@ ALLOWED_HOSTS = [
 ]
 
 INSTALLED_APPS = [
-    'django_bootstrap5',        
+    'django_bootstrap5',
     'blog.apps.BlogConfig',
     'pages.apps.PagesConfig',
+    'core.apps.CoreConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -86,7 +87,7 @@ TIME_ZONE = 'Asia/Yekaterinburg'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 
@@ -101,8 +102,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
-
 LOGIN_REDIRECT_URL = 'blog:index'
 LOGIN_URL = 'login'
+MEDIA_ROOT = BASE_DIR / 'media'
 
-CSRF_FAILURE_VIEW = 'core.views.csrf_failure'
+CSRF_FAILURE_VIEW = 'pages.views.csrf_failure'
