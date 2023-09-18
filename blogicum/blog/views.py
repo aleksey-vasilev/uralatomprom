@@ -109,10 +109,8 @@ class PostDetailView(GetPostMixin, DetailView):
     template_name = 'blog/detail.html'
 
     def get_context_data(self, **kwargs):
-        if (
-            (self.object.author != self.request.user) and
-            (not self.object.is_published)
-        ):
+        if ((self.object.author != self.request.user
+             ) and (not self.object.is_published)):
             raise Http404('Пост снят с публикации')
         context = super().get_context_data(**kwargs)
         context['form'] = CommentForm()
