@@ -94,6 +94,6 @@ class Comment(PublishedModel):
     class Meta:
         ordering = ('created_at',)
         default_related_name = 'comments'
-    
+
     def __str__(self):
         return self.text[:STR_LENGTH]
