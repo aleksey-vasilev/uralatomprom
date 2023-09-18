@@ -28,7 +28,7 @@ class PostAdmin(admin.ModelAdmin):
         'author',
         'location',
         'category',
-        'created_at'
+        'comments_count',
     )
     list_editable = (
         'is_published',
@@ -37,6 +37,10 @@ class PostAdmin(admin.ModelAdmin):
     )
     search_fields = ('title',)
     list_filter = ('is_published',)
+
+    @admin.display(description='Комментарии')
+    def comments_count(self, obj):
+        return obj.comments.count()
 
 
 @admin.register(Location)
