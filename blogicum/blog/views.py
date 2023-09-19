@@ -28,10 +28,8 @@ class PostToolsMixin:
         return posts.select_related(
             'author',
             'location',
-            'category'
-            ).annotate(
-                comment_count=Count('comments')
-                       ).order_by('-pub_date')
+            'category').annotate(
+                comment_count=Count('comments')).order_by('-pub_date')
 
     def obj_paginator(self, post_list):
         paginator = Paginator(post_list, POST_PAGI_LENGTH)
@@ -76,8 +74,7 @@ class PostListView(PostToolsMixin, ListView):
     queryset = PostToolsMixin.post_annotated(Post.objects.filter(
                 is_published=True,
                 pub_date__lte=now(),
-                category__is_published=True
-            ).order_by('-pub_date'))
+                category__is_published=True))
     paginate_by = POST_PAGI_LENGTH
 
 
