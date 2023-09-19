@@ -1,4 +1,3 @@
-from django.core.paginator import Paginator
 from django.utils.timezone import now
 from django.urls import reverse, reverse_lazy
 from django.http import Http404
@@ -6,35 +5,19 @@ from django.views.generic import (
     CreateView, DeleteView, DetailView, ListView, UpdateView
 )
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import (get_object_or_404,
-                              redirect)
-from django.db.models import Count
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404
 
-from .models import Post, Category, User, Comment
 from .constants import POST_PAGI_LENGTH
+from .models import Post, Category, User, Comment
 from .forms import UserForm, PostForm, CommentForm
+from .mixins import PostToolsMixin, AuthorPassMixin, PostMixin
 
 
 class ProfileCreateView(CreateView):
     template_name = 'registration/registration_form.html'
     form_class = UserCreationForm
     success_url = reverse_lazy('blog:index')
-
-
-class PostToolsMixin:
-    @staticmethod
-    def post_annotated(posts):
-        return posts.select_related(
-            'author',
-            'location',
-            'category').annotate(
-                comment_count=Count('comments')).order_by('-pub_date')
-
-    def obj_paginator(self, post_list):
-        paginator = Paginator(post_list, POST_PAGI_LENGTH)
-        page_number = self.request.GET.get('page')
-        return paginator.get_page(page_number)
 
 
 class ProfileDetailView(PostToolsMixin, DetailView):
@@ -68,16 +51,6 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         return reverse('blog:profile', kwargs={'username': self.request.user})
 
 
-class PostListView(PostToolsMixin, ListView):
-    model = Post
-    template_name = 'blog/index.html'
-    queryset = PostToolsMixin.post_annotated(
-        Post.objects.filter(is_published=True,
-                            pub_date__lte=now(),
-                            category__is_published=True))
-    paginate_by = POST_PAGI_LENGTH
-
-
 class CategoryDetailView(PostToolsMixin, DetailView):
     model = Category
     slug_url_kwarg = 'category_slug'
@@ -94,6 +67,16 @@ class CategoryDetailView(PostToolsMixin, DetailView):
         context['category'] = self.object
         context['page_obj'] = self.obj_paginator(post_list)
         return context
+
+
+class PostListView(PostToolsMixin, ListView):
+    model = Post
+    template_name = 'blog/index.html'
+    queryset = PostToolsMixin.post_annotated(
+        Post.objects.filter(is_published=True,
+                            pub_date__lte=now(),
+                            category__is_published=True))
+    paginate_by = POST_PAGI_LENGTH
 
 
 class PostDetailView(PostToolsMixin, DetailView):
@@ -124,26 +107,6 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('blog:profile', kwargs={'username': self.request.user})
-
-
-class AuthorPassMixin(UserPassesTestMixin):
-    def test_func(self):
-        return (self.get_object().author == self.request.user)
-
-
-class PostMixin(LoginRequiredMixin, AuthorPassMixin):
-    model = Post
-    template_name = 'blog/create.html'
-    pk_url_kwarg = 'post_id'
-    form_class = PostForm
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = PostForm(instance=self.object)
-        return context
-
-    def handle_no_permission(self):
-        return redirect('blog:post_detail', post_id=self.kwargs['post_id'])
 
 
 class PostUpdateView(PostMixin, UpdateView):
