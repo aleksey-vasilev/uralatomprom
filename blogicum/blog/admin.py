@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
+from django.utils.safestring import mark_safe
 
 from .models import Category, Post, Location, User
 
@@ -22,6 +23,7 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = (
+        'post_image',
         'title',
         'pub_date',
         'is_published',
@@ -41,6 +43,11 @@ class PostAdmin(admin.ModelAdmin):
     @admin.display(description='Комментарии')
     def comments_count(self, obj):
         return obj.comments.count()
+
+    @admin.display(description='Картинка')
+    def post_image(self, obj):
+        return mark_safe(f'<img src={obj.image.url} width="80" height="60">'
+                         ) if (obj.image) else None
 
 
 @admin.register(Location)
