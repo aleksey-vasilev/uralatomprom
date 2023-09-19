@@ -71,10 +71,10 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 class PostListView(PostToolsMixin, ListView):
     model = Post
     template_name = 'blog/index.html'
-    queryset = PostToolsMixin.post_annotated(Post.objects.filter(
-                is_published=True,
-                pub_date__lte=now(),
-                category__is_published=True))
+    queryset = PostToolsMixin.post_annotated(
+        Post.objects.filter(is_published=True,
+                            pub_date__lte=now(),
+                            category__is_published=True))
     paginate_by = POST_PAGI_LENGTH
 
 
