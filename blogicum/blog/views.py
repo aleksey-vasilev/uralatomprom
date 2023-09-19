@@ -147,8 +147,7 @@ class PostMixin(LoginRequiredMixin, AuthorPassMixin):
 
 
 class PostUpdateView(PostMixin, UpdateView):
-    def get_success_url(self):
-        return reverse('blog:post_detail', kwargs={'post_id': self.object.pk})
+    pass
 
 
 class PostDeleteView(PostMixin, DeleteView):

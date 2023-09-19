@@ -80,7 +80,7 @@ class Post(PublishedModel):
         return self.title[:STR_LENGTH]
 
     def get_absolute_url(self):
-        return reverse('blog:post_detail', kwargs={'pk': self.pk})
+        return reverse('blog:post_detail', kwargs={'post_id': self.pk})
 
 
 class Comment(PublishedModel):
