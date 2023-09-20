@@ -41,3 +41,14 @@ class PostMixin(LoginRequiredMixin, AuthorPassMixin):
 
     def handle_no_permission(self):
         return redirect('blog:post_detail', post_id=self.kwargs['post_id'])
+
+
+class CommentMixin(LoginRequiredMixin):
+    model = Comment
+    form_class = CommentForm
+    pk_url_kwarg = 'comment_id'
+    template_name = 'blog/comment.html'
+
+    def get_success_url(self):
+        return reverse('blog:post_detail',
+                       kwargs={'post_id': self.object.post.pk})
