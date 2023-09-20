@@ -9,9 +9,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 
 from .constants import POST_PAGI_LENGTH
-from .models import Post, Category, User, Comment
+from .models import Post, Category, User
 from .forms import UserForm, PostForm, CommentForm
-from .mixins import PostToolsMixin, AuthorPassMixin, PostMixin
+from .mixins import (PostToolsMixin, AuthorPassMixin,
+                     PostMixin, CommentMixin)
 
 
 class ProfileCreateView(CreateView):
@@ -116,17 +117,6 @@ class PostUpdateView(PostMixin, UpdateView):
 class PostDeleteView(PostMixin, DeleteView):
     def get_success_url(self):
         return reverse('blog:profile', kwargs={'username': self.request.user})
-
-
-class CommentMixin(LoginRequiredMixin):
-    model = Comment
-    form_class = CommentForm
-    pk_url_kwarg = 'comment_id'
-    template_name = 'blog/comment.html'
-
-    def get_success_url(self):
-        return reverse('blog:post_detail',
-                       kwargs={'post_id': self.object.post.pk})
 
 
 class CommentCreateView(CommentMixin, CreateView):

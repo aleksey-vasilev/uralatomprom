@@ -1,11 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
+from django.urls import reverse
 from django.db.models import Count
 from django.core.paginator import Paginator
 
 from .constants import POST_PAGI_LENGTH
-from .models import Post
-from .forms import PostForm
+from .models import Post, Comment
+from .forms import PostForm, CommentForm
 
 
 class PostToolsMixin:
