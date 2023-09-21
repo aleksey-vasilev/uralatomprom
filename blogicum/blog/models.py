@@ -27,38 +27,17 @@ class Category(PublishedModel):
         return self.title[:STR_LENGTH]
 
 
-class Location(PublishedModel):
-    name = models.CharField(
-        'Название места',
-        max_length=MAX_LENGTH,
-    )
-
-    class Meta:
-        verbose_name = 'местоположение'
-        verbose_name_plural = 'Местоположения'
-
-    def __str__(self):
-        return self.name[:STR_LENGTH]
-
-
 class Post(PublishedModel):
     title = models.CharField('Заголовок', max_length=MAX_LENGTH)
     text = models.TextField('Текст')
-    pub_date = models.DateTimeField(
-        'Дата и время публикации',
-        help_text=('Если установить дату и время в '
+    pub_date = models.DateField(
+        'Дата публикации',
+        help_text=('Если установить дату в '
                    'будущем — можно делать отложенные публикации.'))
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         verbose_name='Автор публикации',
-    )
-    location = models.ForeignKey(
-        Location,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        verbose_name='Местоположение',
     )
     category = models.ForeignKey(
         Category,

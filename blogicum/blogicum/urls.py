@@ -13,6 +13,7 @@ urlpatterns = [
     path('auth/registration/',
          ProfileCreateView.as_view(),
          name='registration',),
+    path('captcha/', include('captcha.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = 'pages.views.page_not_found'

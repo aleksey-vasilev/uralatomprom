@@ -4,21 +4,29 @@ from django.http import Http404
 from django.views.generic import (
     CreateView, DeleteView, DetailView, ListView, UpdateView
 )
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import authenticate, login
 
 from .constants import POST_PAGI_LENGTH
 from .models import Post, Category, User
-from .forms import UserForm, PostForm, CommentForm
+from .forms import (ParticipantCreationForm, ParticipantChangeForm,
+                    CommentForm, PostForm)
 from .mixins import (PostToolsMixin, AuthorPassMixin,
-                     PostMixin, CommentMixin)
+                     PostMixin, CommentMixin, UserInStaffMixin)
 
 
 class ProfileCreateView(CreateView):
     template_name = 'registration/registration_form.html'
-    form_class = UserCreationForm
+    form_class = ParticipantCreationForm
     success_url = reverse_lazy('blog:index')
+
+    def form_valid(self, form):
+        valid = super().form_valid(form)
+        new_user = authenticate(username=form.cleaned_data.get('username'),
+                                password=form.cleaned_data.get('password1'))
+        login(self.request, new_user)
+        return valid
 
 
 class ProfileDetailView(PostToolsMixin, DetailView):
@@ -43,7 +51,7 @@ class ProfileDetailView(PostToolsMixin, DetailView):
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'blog/user.html'
-    form_class = UserForm
+    form_class = ParticipantChangeForm
 
     def get_object(self):
         return self.request.user
@@ -97,7 +105,7 @@ class PostDetailView(PostToolsMixin, DetailView):
         return context
 
 
-class PostCreateView(LoginRequiredMixin, CreateView):
+class PostCreateView(LoginRequiredMixin, UserInStaffMixin, CreateView):
     model = Post
     template_name = 'blog/create.html'
     form_class = PostForm

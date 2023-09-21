@@ -6,16 +6,25 @@ SECRET_KEY = 'django-insecure--%10qo!-ncfd*zcq)hzkrr(n213t!5lkq4o7fshnfpokvh_w1z
 
 DEBUG = True
 
+'''
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
 ]
+'''
+
+ALLOWED_HOSTS = [
+    'www.uralatomprom.ru',
+    'uralatomprom.ru',
+]
 
 INSTALLED_APPS = [
+    'captcha',
     'django_bootstrap5',
     'blog.apps.BlogConfig',
     'pages.apps.PagesConfig',
     'core.apps.CoreConfig',
+    'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -56,14 +65,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'blogicum.wsgi.application'
 
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+'''
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'u2252058_default',
+        'USER': 'u2252058_default',
+        'PASSWORD': 'y1NCCDgajKZkA407',
+        'HOST': 'localhost',
+    }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -94,6 +113,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = 'static/'
+
 STATICFILES_DIRS = [
     BASE_DIR / 'static_dev',
 ]
@@ -107,3 +128,7 @@ LOGIN_URL = 'login'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 CSRF_FAILURE_VIEW = 'pages.views.csrf_failure'
+
+AUTH_USER_MODEL = 'users.Participant'
+
+CAPTCHA_FONT_SIZE = 36

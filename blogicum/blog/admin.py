@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
 from django.utils.safestring import mark_safe
 
-from .models import Category, Post, Location, User
+from .models import Category, Post, User
 
 admin.site.empty_value_display = 'Не задано'
 
@@ -28,14 +28,12 @@ class PostAdmin(admin.ModelAdmin):
         'pub_date',
         'is_published',
         'author',
-        'location',
         'category',
         'comments_count',
     )
     list_editable = (
         'is_published',
         'category',
-        'location'
     )
     search_fields = ('title',)
     list_filter = ('is_published',)
@@ -50,30 +48,12 @@ class PostAdmin(admin.ModelAdmin):
                          ) if (obj.image) else None
 
 
-@admin.register(Location)
-class LocationAdmin(admin.ModelAdmin):
-    inlines = (
-        PostInline,
-    )
-
-
-admin.site.unregister(User)
-
-
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    list_display = (
-        'username',
-        'email',
-        'first_name',
-        'last_name',
-        'is_staff',
-        'posts_count'
-    )
-
-    @admin.display(description='Кол-во постов пользователя')
-    def posts_count(self, obj):
-        return obj.posts.count()
+    list_display = ('username', 'is_speaker',
+                    'full_name', 'organisation',
+                    'phone', 'email',
+                    'abstract',)
 
 
 admin.site.unregister(Group)

@@ -14,7 +14,6 @@ class PostToolsMixin:
     def post_annotated(posts):
         return posts.select_related(
             'author',
-            'location',
             'category').annotate(
                 comment_count=Count('comments')).order_by('-pub_date')
 
@@ -27,6 +26,14 @@ class PostToolsMixin:
 class AuthorPassMixin(UserPassesTestMixin):
     def test_func(self):
         return (self.get_object().author == self.request.user)
+
+
+class UserInStaffMixin(UserPassesTestMixin):
+    def test_func(self):
+        return (self.request.user.is_staff)
+
+    def handle_no_permission(self):
+        return redirect('blog:index')
 
 
 class PostMixin(LoginRequiredMixin, AuthorPassMixin):
