@@ -7,7 +7,7 @@ class AboutPage(TemplateView):
 
 
 class RulesPage(TemplateView):
-    template_name = 'pages/rules.html'
+    template_name = 'pages/venue.html'
 
 
 def page_not_found(request, exception):

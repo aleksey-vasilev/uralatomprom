@@ -6,7 +6,7 @@ from django.core.paginator import Paginator
 
 from .constants import POST_PAGI_LENGTH
 from .models import Post, Comment
-from .forms import PostForm, CommentForm
+from .forms import PostForm
 
 
 class PostToolsMixin:
@@ -40,7 +40,6 @@ class PostMixin(LoginRequiredMixin, AuthorPassMixin):
     model = Post
     template_name = 'blog/create.html'
     pk_url_kwarg = 'post_id'
-    form_class = PostForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -53,7 +52,6 @@ class PostMixin(LoginRequiredMixin, AuthorPassMixin):
 
 class CommentMixin(LoginRequiredMixin):
     model = Comment
-    form_class = CommentForm
     pk_url_kwarg = 'comment_id'
     template_name = 'blog/comment.html'
 

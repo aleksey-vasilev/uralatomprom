@@ -119,7 +119,7 @@ class PostCreateView(LoginRequiredMixin, UserInStaffMixin, CreateView):
 
 
 class PostUpdateView(PostMixin, UpdateView):
-    pass
+    form_class = PostForm
 
 
 class PostDeleteView(PostMixin, DeleteView):
@@ -128,6 +128,8 @@ class PostDeleteView(PostMixin, DeleteView):
 
 
 class CommentCreateView(CommentMixin, CreateView):
+    form_class = CommentForm
+
     def form_valid(self, form):
         post = get_object_or_404(Post, id=self.kwargs['post_id'])
         form.instance.author = self.request.user
@@ -136,7 +138,7 @@ class CommentCreateView(CommentMixin, CreateView):
 
 
 class CommentUpdateView(AuthorPassMixin, CommentMixin, UpdateView):
-    pass
+    form_class = CommentForm
 
 
 class CommentDeleteView(AuthorPassMixin, CommentMixin, DeleteView):

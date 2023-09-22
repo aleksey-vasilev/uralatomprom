@@ -18,6 +18,7 @@ ALLOWED_HOSTS = [
     'uralatomprom.ru',
 ]
 
+
 INSTALLED_APPS = [
     'captcha',
     'django_bootstrap5',
