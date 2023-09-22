@@ -57,5 +57,5 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.unregister(Group)
-admin.site.site_title = 'Администрирование Блогикум'
-admin.site.site_header = 'Администрирование Блогикум'
+admin.site.site_title = 'Администрирование БСАЭ-2024'
+admin.site.site_header = 'Администрирование БСАЭ-2024'

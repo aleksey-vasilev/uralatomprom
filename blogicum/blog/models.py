@@ -46,7 +46,7 @@ class Post(PublishedModel):
         verbose_name='Категория',
     )
     image = models.ImageField('Изображение',
-                              upload_to='birthdays_images',
+                              upload_to='post_images',
                               blank=True)
 
     class Meta:

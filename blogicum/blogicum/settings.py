@@ -78,7 +78,7 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'u2252058_default',
+        'NAME': 'u2252058_ural_atom',
         'USER': 'u2252058_default',
         'PASSWORD': 'y1NCCDgajKZkA407',
         'HOST': 'localhost',
