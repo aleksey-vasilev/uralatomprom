@@ -14,7 +14,11 @@ urlpatterns = [
          ProfileCreateView.as_view(),
          name='registration',),
     path('captcha/', include('captcha.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+settings.DEBUG = True
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+settings.DEBUG = False
 
 handler404 = 'pages.views.page_not_found'
 handler500 = 'pages.views.internal_server_error'
