@@ -1,17 +1,15 @@
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure--%10qo!-ncfd*zcq)hzkrr(n213t!5lkq4o7fshnfpokvh_w1z'
+load_dotenv(BASE_DIR / '.env')
+
+SECRET_KEY = os.getenv('PASSWORD', 'default')
 
 DEBUG = False
-
-'''
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-]
-'''
 
 ALLOWED_HOSTS = [
     'www.uralatomprom.ru',
@@ -66,21 +64,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'blogicum.wsgi.application'
 
-'''
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-'''
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'u2252058_ural_atom',
-        'USER': 'u2252058_default',
-        'PASSWORD': 'y1NCCDgajKZkA407',
+        'NAME': os.getenv('SQL_NAME', 'default'),
+        'USER': os.getenv('SQL_USER', 'default'),
+        'PASSWORD': os.getenv('SQL_PASSWORD', 'default'),
         'HOST': 'localhost',
     }
 }
